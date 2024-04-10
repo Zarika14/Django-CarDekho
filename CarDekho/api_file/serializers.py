@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Carlist, Showroomlist
+from ..models import *
 
 # Validators
 def alphanumeric(value):
@@ -26,12 +26,7 @@ def alphanumeric(value):
 #         instance.save()
 #         return instance
 
-# SERIALIZER CLASS FOR SHOWROOMLIST
-class ShowroomSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = Showroomlist
-        fields = "__all__"
+
 
 
 #SERIALIZER CALSS FOR CARLIST
@@ -70,5 +65,19 @@ class CarSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Name and description can not be same ")
         return data
     
-    # Validators
+   
     
+    
+# SERIALIZER CLASS FOR SHOWROOMLIST
+class ShowroomSerializer(serializers.ModelSerializer):
+    # Showrooms = CarSerializer(many = True,read_only = True)
+    # Showrooms = serializers.StringRelatedField(many=True)
+    Showrooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # Showrooms= serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='Car_details'
+    # )
+    class Meta:
+        model = Showroomlist
+        fields = "__all__"
