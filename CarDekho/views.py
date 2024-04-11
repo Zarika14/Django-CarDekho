@@ -56,7 +56,7 @@ def car_list_view(request):
 #         return Response(serializer.data)
 
 @api_view(['GET','PUT','DELETE'])
-def car_details(request,id):
+def car_details_view(request,id):
     if request.method == 'GET':
         car = Carlist.objects.get(id=id)
         
@@ -90,10 +90,11 @@ def car_details(request,id):
 
 # APIs USING CLASS VIEW
 class Showroom_view(APIView):
-    
     def get(self, request):
+        
         showroom = Showroomlist.objects.all()
         serializer = ShowroomSerializer(showroom, many = True, context={'request': request})
+        
         return Response(serializer.data)
     
     def post(self, request):

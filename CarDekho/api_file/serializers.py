@@ -73,15 +73,17 @@ class CarSerializer(serializers.ModelSerializer):
 # SERIALIZER CLASS FOR SHOWROOMLIST
 
 class ShowroomSerializer(serializers.ModelSerializer):
-    # Showrooms = CarSerializer(many = True,read_only = True)
-    # Showrooms = serializers.StringRelatedField(many=True)
-    # Showrooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    
+    # Showrooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)  
+    
     Showrooms= serializers.HyperlinkedRelatedField(
         many = True,
         read_only = True,
-        view_name = 'car_details'
+        view_name = 'car_details_view',  
+        lookup_field = 'id'
     )
     
     class Meta:
         model = Showroomlist
-        fields = "__all__"
+        fields = '__all__'
+    
