@@ -56,7 +56,7 @@ def car_list_view(request):
 #         return Response(serializer.data)
 
 @api_view(['GET','PUT','DELETE'])
-def Car_details(request,id):
+def car_details(request,id):
     if request.method == 'GET':
         car = Carlist.objects.get(id=id)
         
