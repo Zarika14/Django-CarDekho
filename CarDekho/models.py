@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 def alphanumeric(value):
     if not str(value).isalnum():
@@ -26,3 +27,13 @@ class Carlist(models.Model):
     def __str__(self):
         return self.name
     
+# REVIEW MODEL
+class Review(models.Model):
+    rating = models.IntegerField(validators=[MinValueValidator,MaxValueValidator])
+    comments = models.CharField(max_length=200, null= True)
+    car = models.ForeignKey(Carlist,on_delete= models.CASCADE,related_name="Reviews", null = True )
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return "The rating of"+" " + (self.car.name)+ " is : " + str(self.rating)

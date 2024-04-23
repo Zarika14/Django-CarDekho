@@ -6,6 +6,10 @@ from .api_file.serializers import CarSerializer,ShowroomSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework import mixins
+from rest_framework import generics
+from rest_framework.authentication import BasicAuthentication,SessionAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 import json
 
 
@@ -47,14 +51,6 @@ def car_list_view(request):
         
     
             
-# @api_view()
-# def get_particular_car_details(request,id):
-#     if request.method == 'GET':
-#         car = Carlist.objects.get(id=id)
-#         serializer = CarSerializer(car)
-    
-#         return Response(serializer.data)
-
 @api_view(['GET','PUT','DELETE'])
 def car_details_view(request,id):
     if request.method == 'GET':
@@ -90,6 +86,12 @@ def car_details_view(request,id):
 
 # APIs USING CLASS VIEW
 class Showroom_view(APIView):
+    # authentication_classes = [BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAdminUser]
+    # permission_classes = [AllowAny]
+    # permission_classes = [IsAdminUser]
     def get(self, request):
         
         showroom = Showroomlist.objects.all()

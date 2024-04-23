@@ -26,12 +26,17 @@ def alphanumeric(value):
 #         instance.save()
 #         return instance
 
-
+# CREATE REVIESERIALIZER
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = "__all__"
 
 
 #SERIALIZER CALSS FOR CARLIST
 class CarSerializer(serializers.ModelSerializer):
     discount_price = serializers.SerializerMethodField()
+    Reviews = ReviewSerializer(many = True, read_only = True)
     class Meta:
         model = Carlist
         # if we want to all fiels of the model
@@ -73,9 +78,9 @@ class CarSerializer(serializers.ModelSerializer):
 # SERIALIZER CLASS FOR SHOWROOMLIST
 
 class ShowroomSerializer(serializers.ModelSerializer):
-    
-    # Showrooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)  
-    
+    # Showrooms = CarSerializer(many = True,read_only = True)
+    # Showrooms = serializers.StringRelatedField(many=True)
+    # Showrooms = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     Showrooms= serializers.HyperlinkedRelatedField(
         many = True,
         read_only = True,
@@ -86,4 +91,7 @@ class ShowroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Showroomlist
         fields = '__all__'
+        
+
+        
     
