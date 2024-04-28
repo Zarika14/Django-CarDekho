@@ -1,19 +1,54 @@
 from django.shortcuts import render
-from .models import Carlist,Showroomlist
+from .models import Carlist,Showroomlist,Review
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
-from .api_file.serializers import CarSerializer,ShowroomSerializer
+from .api_file.serializers import CarSerializer,ShowroomSerializer,ReviewSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
-from rest_framework import mixins
+from rest_framework import viewsets
+from django.shortcuts import get_object_or_404
+# from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.authentication import BasicAuthentication,SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser,DjangoModelPermissions
 import json
 
 
 # Create your views here.
+# Create using GenericAPIView
+class Review_view(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
+class Review_details(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+# Creating view using mixins 
+# class Review_details(mixins.RetrieveModelMixin,
+#                   generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+
+#     def get(self, request, *args, **kwargs):
+#         return self.retrieve(request, *args, **kwargs)
+
+# class Review_view(mixins.ListModelMixin,
+#                   mixins.CreateModelMixin,
+#                   generics.GenericAPIView):
+#     queryset = Review.objects.all()
+#     serializer_class = ReviewSerializer
+#     authentication_classes = [SessionAuthentication]
+#     permission_classes = [DjangoModelPermissions]
+
+#     def get(self, request, *args, **kwargs):
+#         return self.list(request, *args, **kwargs)
+
+#     def post(self, request, *args, **kwargs):
+#         return self.create(request, *args, **kwargs)
+    
 # def car_list_view(request):
     # cars = Carlist.objects.all()
     
@@ -83,7 +118,19 @@ def car_details_view(request,id):
 #         car.delete()
 #         return Response({'message':'Car deleted Successfully'},status = 200)        
         
+# APIs using viewset
+class Showroom_viewset(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Showroomlist.objects.all()
+        serializer = ShowroomSerializer(queryset, many=True)
+        return Response(serializer.data)
 
+    def retrieve(self, request, pk=None):
+        queryset = Showroomlist.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = ShowroomSerializer(user)
+        return Response(serializer.data)
+    
 # APIs USING CLASS VIEW
 class Showroom_view(APIView):
     # authentication_classes = [BasicAuthentication]
